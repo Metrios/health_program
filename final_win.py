@@ -10,13 +10,13 @@ from PyQt5.QtWidgets import (
 from instr import *
 
 
-class FinalWin():  # QWidget
-    def __init__(self):  # , exp
+class FinalWin(QWidget):
+    def __init__(self, exp):  # , exp
         ''' окно, в котором проводится опрос '''
         super().__init__()
 
         # получаем данные об эксперименте
-     #    self.exp = exp
+        self.exp = exp
 
         # создаём и настраиваем графические элементы:
         self.initUI()
@@ -28,12 +28,29 @@ class FinalWin():  # QWidget
         self.show()
 
     def results(self):
-        pass
+        if self.exp.age < 7:
+            self.index = 0
+            return "нет данных для такого возраста"
+
+        self.index = (4 * (int(self.exp.t1) + int(self.exp.t2) +
+                      int(self.exp.t3)) - 200) / 10
+
+        if self.exp.age == 7 or self.exp.age == 8:
+            if self.index >= 21:
+                return txt_res1
+            elif self.index < 21 and self.index >= 17:
+                return txt_res2
+            elif self.index < 17 and self.index >= 12:
+                return txt_res3
+            elif self.index < 12 and self.index >= 6.5:
+                return txt_res4
+            else:
+                return txt_res5
 
     def initUI(self):
         ''' создаёт графические элементы '''
-     #    self.work_text = QLabel(txt_workheart + self.results())
-     #    self.index_text = QLabel(txt_index + str(self.index))
+        self.work_text = QLabel(txt_workheart + self.results())
+        self.index_text = QLabel(txt_index + str(self.index))
 
         self.layout_line = QVBoxLayout()
         self.layout_line.addWidget(self.index_text, alignment=Qt.AlignCenter)
